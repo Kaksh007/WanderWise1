@@ -10,7 +10,7 @@ import { recommendationService } from '../services/recommendationService'
 import Container from '../components/layout/Container'
 import Card from '../components/ui/Card'
 import Button from '../components/ui/Button'
-import { Skeleton } from '../components/ui/Skeleton'
+import Skeleton from '../components/ui/Skeleton'
 
 function ResultsPage() {
   const location = useLocation()
