@@ -20,33 +20,44 @@ export const getDestination = async (req, res, next) => {
       })
     }
 
-    // If found in database, check if cache is valid
+    // If found in database, check if cache is valid and complete
     if (destination) {
       // Check if cache is still valid (7 days)
       const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
       const isCacheValid = destination.cachedAt && new Date(destination.cachedAt) > sevenDaysAgo
 
-      // If cache is valid and has all required fields, return it
-      if (
-        isCacheValid &&
+      // Check if all required fields exist and have data
+      const hasCompleteData =
         destination.topPlaces &&
+        Array.isArray(destination.topPlaces) &&
         destination.topPlaces.length > 0 &&
         destination.restaurants &&
+        Array.isArray(destination.restaurants) &&
         destination.restaurants.length > 0 &&
         destination.stays &&
+        Array.isArray(destination.stays) &&
         destination.stays.length > 0
-      ) {
-        return res.json(destination)
+
+      // If cache is valid and has all required fields, return it
+      if (isCacheValid && hasCompleteData) {
+        // Convert Mongoose document to plain object to ensure all fields are included
+        return res.json(destination.toObject ? destination.toObject() : destination)
       }
 
       // If cache expired or incomplete, fetch fresh data
+      console.log(
+        `Cache check for ${decodedName}: valid=${isCacheValid}, hasCompleteData=${hasCompleteData}`
+      )
       try {
         const freshData = await poiService.getDestinationDetails(decodedName)
+        console.log(
+          `Fetched fresh data for ${decodedName}: restaurants=${freshData.restaurants?.length || 0}, stays=${freshData.stays?.length || 0}`
+        )
         return res.json(freshData)
       } catch (error) {
         // If API fetch fails, return existing data (even if incomplete)
         console.warn('Failed to fetch fresh data, returning cached:', error.message)
-        return res.json(destination)
+        return res.json(destination.toObject ? destination.toObject() : destination)
       }
     }
 

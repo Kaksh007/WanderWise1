@@ -218,16 +218,31 @@ Requirements:
       })
 
       if (cached && this.isCacheValid(cached.cachedAt)) {
-        return {
-          name: cached.name,
-          country: cached.country,
-          coords: cached.coords,
-          summary: cached.summary,
-          bestTimeToVisit: cached.bestTimeToVisit,
-          topPlaces: cached.topPlaces || [],
-          restaurants: cached.restaurants || [],
-          stays: cached.stays || [],
+        // Check if cached data has all required fields
+        const hasAllFields = 
+          cached.restaurants && 
+          Array.isArray(cached.restaurants) && 
+          cached.restaurants.length > 0 &&
+          cached.stays && 
+          Array.isArray(cached.stays) && 
+          cached.stays.length > 0
+        
+        // If cache is valid and complete, return it
+        if (hasAllFields) {
+          return {
+            name: cached.name,
+            country: cached.country,
+            coords: cached.coords,
+            summary: cached.summary,
+            bestTimeToVisit: cached.bestTimeToVisit,
+            topPlaces: cached.topPlaces || [],
+            restaurants: cached.restaurants || [],
+            stays: cached.stays || [],
+          }
         }
+        
+        // If cache is valid but incomplete (old format), log and continue to fetch fresh data
+        console.log(`Cache for ${location} is valid but incomplete (missing restaurants/stays), fetching fresh data`)
       }
 
       // If not cached or expired, generate comprehensive data using Groq
@@ -237,7 +252,17 @@ Requirements:
         throw new Error(`Could not generate destination details for: ${location}`)
       }
 
-      // Cache the result
+      // Validate that we have all required data
+      const hasRestaurants = destinationData.restaurants && Array.isArray(destinationData.restaurants) && destinationData.restaurants.length > 0
+      const hasStays = destinationData.stays && Array.isArray(destinationData.stays) && destinationData.stays.length > 0
+      const hasPlaces = destinationData.topPlaces && Array.isArray(destinationData.topPlaces) && destinationData.topPlaces.length > 0
+
+      if (!hasRestaurants || !hasStays || !hasPlaces) {
+        console.warn(`Incomplete data for ${location}: places=${hasPlaces}, restaurants=${hasRestaurants}, stays=${hasStays}`)
+        // Still return the data, but log a warning
+      }
+
+      // Cache the result (even if incomplete, so we don't keep calling the API)
       await this.cacheDestination(destinationData)
 
       return destinationData
@@ -253,6 +278,8 @@ Requirements:
    */
   async generateDestinationDetails(location) {
     const prompt = `You are a travel information assistant. For the destination "${location}", provide comprehensive travel information in JSON format only.
+
+CRITICAL: You MUST include all three sections: topPlaces, restaurants, and stays. Each section must have exactly 5 items.
 
 Return a JSON object with this exact structure (no extra text, only valid JSON):
 {
@@ -293,19 +320,20 @@ Return a JSON object with this exact structure (no extra text, only valid JSON):
   ]
 }
 
-Requirements:
-- Provide exactly 5 top places
-- Provide exactly 5 restaurants
-- Provide exactly 5 stays
+MANDATORY Requirements:
+- You MUST provide exactly 5 items in topPlaces array
+- You MUST provide exactly 5 items in restaurants array  
+- You MUST provide exactly 5 items in stays array
+- ALL three arrays (topPlaces, restaurants, stays) are REQUIRED and must not be empty
 - Use real, well-known places, restaurants, and properties for this destination
-- Ratings should be realistic (between 3.5 and 5.0)
+- Ratings should be realistic numbers between 3.5 and 5.0
 - Coordinates should be approximate but reasonable for the location
 - All descriptions should be concise (1-2 sentences max)
-- Output ONLY valid JSON, no markdown, no code blocks, no explanations`
+- Output ONLY valid JSON, no markdown, no code blocks, no explanations, no additional text`
 
     try {
       const response = await this.groqAdapter.generate(prompt, {
-        maxTokens: 2500,
+        maxTokens: 3000, // Increased to ensure we get all data
         temperature: 0.5,
         retries: 2,
       })
@@ -314,12 +342,33 @@ Requirements:
       const jsonMatch = response.match(/\{[\s\S]*\}/)
       if (jsonMatch) {
         const parsed = JSON.parse(jsonMatch[0])
+        
+        // Validate that all required fields are present
+        if (!parsed.restaurants || !Array.isArray(parsed.restaurants) || parsed.restaurants.length === 0) {
+          console.warn(`Warning: No restaurants found in Groq response for ${location}`)
+          console.log('Groq response sample:', response.substring(0, 500))
+        }
+        if (!parsed.stays || !Array.isArray(parsed.stays) || parsed.stays.length === 0) {
+          console.warn(`Warning: No stays found in Groq response for ${location}`)
+          console.log('Groq response sample:', response.substring(0, 500))
+        }
+        
+        // Ensure arrays exist even if empty
+        if (!parsed.restaurants) parsed.restaurants = []
+        if (!parsed.stays) parsed.stays = []
+        if (!parsed.topPlaces) parsed.topPlaces = []
+        
+        console.log(`Parsed data for ${location}: places=${parsed.topPlaces?.length || 0}, restaurants=${parsed.restaurants?.length || 0}, stays=${parsed.stays?.length || 0}`)
+        
         return parsed
       }
 
+      console.error('No JSON match found in Groq response')
+      console.log('Groq response:', response.substring(0, 1000))
       return null
     } catch (error) {
       console.error('Error generating destination details with Groq:', error.message)
+      console.error('Error stack:', error.stack)
       return null
     }
   }
