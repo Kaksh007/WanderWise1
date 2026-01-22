@@ -2,8 +2,9 @@ import { lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import ErrorBoundary from './components/ErrorBoundary'
-import Navigation from './components/Navigation'
-import LoadingSpinner from './components/LoadingSpinner'
+import Navigation from './components/layout/Navigation'
+import LoadingSpinner from './components/common/LoadingSpinner'
+import Footer from './components/layout/Footer'
 import ProtectedRoute from './components/ProtectedRoute'
 
 // Code splitting with React.lazy
@@ -39,7 +40,31 @@ function App() {
               <Route path="/register" element={<RegisterPage />} />
             </Routes>
           </Suspense>
-          <Toaster position="top-right" />
+          <Footer />
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 3000,
+              style: {
+                background: '#363636',
+                color: '#fff',
+              },
+              success: {
+                duration: 3000,
+                iconTheme: {
+                  primary: '#10b981',
+                  secondary: '#fff',
+                },
+              },
+              error: {
+                duration: 4000,
+                iconTheme: {
+                  primary: '#ef4444',
+                  secondary: '#fff',
+                },
+              },
+            }}
+          />
         </div>
       </Router>
     </ErrorBoundary>

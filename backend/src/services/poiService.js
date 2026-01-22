@@ -11,9 +11,10 @@ class POIService {
    */
   async getPOIData(location, limit = 5) {
     try {
-      // Check cache first
+      // Check cache first - use exact match to avoid partial matches
+      const escapedLocation = location.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
       const cached = await Destination.findOne({
-        name: new RegExp(location, 'i'),
+        name: new RegExp(`^${escapedLocation}$`, 'i'),
       })
 
       if (cached && this.isCacheValid(cached.cachedAt)) {
@@ -212,9 +213,11 @@ Requirements:
    */
   async getDestinationDetails(location) {
     try {
-      // Check cache first
+      // Check cache first - use exact match to avoid partial matches
+      // Escape special regex characters in location name
+      const escapedLocation = location.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
       const cached = await Destination.findOne({
-        name: new RegExp(location, 'i'),
+        name: new RegExp(`^${escapedLocation}$`, 'i'),
       })
 
       if (cached && this.isCacheValid(cached.cachedAt)) {

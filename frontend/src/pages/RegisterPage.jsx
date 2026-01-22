@@ -1,8 +1,14 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import { Mail, Lock, User, UserPlus } from 'lucide-react'
 import { useAuthStore } from '../store/useAuthStore'
 import { authService } from '../services/authService'
 import toast from 'react-hot-toast'
+import Container from '../components/layout/Container'
+import Card from '../components/ui/Card'
+import Input from '../components/ui/Input'
+import Button from '../components/ui/Button'
 
 function RegisterPage() {
   const navigate = useNavigate()
@@ -30,6 +36,11 @@ function RegisterPage() {
       return
     }
 
+    if (formData.password.length < 6) {
+      toast.error('Password must be at least 6 characters')
+      return
+    }
+
     setLoading(true)
 
     try {
@@ -49,73 +60,100 @@ function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
-        <h1 className="text-3xl font-bold mb-6 text-center">Register</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Name</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              minLength={6}
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Confirm Password</label>
-            <input
-              type="password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
-          >
-            {loading ? 'Registering...' : 'Register'}
-          </button>
-        </form>
-        <p className="mt-4 text-center text-sm">
-          Already have an account?{' '}
-          <Link to="/login" className="text-blue-500 hover:text-blue-700">
-            Login
-          </Link>
-        </p>
-      </div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 via-white to-purple-50 py-12">
+      <Container size="sm">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Card className="shadow-xl" padding="lg">
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 rounded-full mb-4">
+                <UserPlus className="h-8 w-8 text-primary-600" />
+              </div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                Create Account
+              </h1>
+              <p className="text-gray-600">
+                Sign up to start planning your next adventure
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <Input
+                label="Full Name"
+                name="name"
+                type="text"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                leftIcon={<User className="h-4 w-4" />}
+                placeholder="Enter your full name"
+              />
+
+              <Input
+                label="Email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                leftIcon={<Mail className="h-4 w-4" />}
+                placeholder="Enter your email"
+              />
+
+              <Input
+                label="Password"
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                minLength={6}
+                leftIcon={<Lock className="h-4 w-4" />}
+                placeholder="Create a password (min. 6 characters)"
+                helperText="Password must be at least 6 characters"
+              />
+
+              <Input
+                label="Confirm Password"
+                name="confirmPassword"
+                type="password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+                leftIcon={<Lock className="h-4 w-4" />}
+                placeholder="Confirm your password"
+              />
+
+              <Button
+                type="submit"
+                variant="primary"
+                size="lg"
+                loading={loading}
+                className="w-full"
+              >
+                {loading ? 'Creating account...' : 'Create Account'}
+              </Button>
+            </form>
+
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-600">
+                Already have an account?{' '}
+                <Link
+                  to="/login"
+                  className="text-primary-600 hover:text-primary-700 font-semibold"
+                >
+                  Sign in
+                </Link>
+              </p>
+            </div>
+          </Card>
+        </motion.div>
+      </Container>
     </div>
   )
 }
 
 export default RegisterPage
-

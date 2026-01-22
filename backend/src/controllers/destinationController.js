@@ -13,10 +13,12 @@ export const getDestination = async (req, res, next) => {
       destination = await Destination.findById(id)
     }
 
-    // If not found by ObjectId, try to find by name (case-insensitive)
+    // If not found by ObjectId, try to find by name (case-insensitive, exact match)
     if (!destination) {
+      // Escape special regex characters to prevent regex injection
+      const escapedName = decodedName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
       destination = await Destination.findOne({
-        name: new RegExp(`^${decodedName}$`, 'i'),
+        name: new RegExp(`^${escapedName}$`, 'i'),
       })
     }
 

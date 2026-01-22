@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react'
-import TopDestinationCard from './TopDestinationCard'
-import LoadingSpinner from './LoadingSpinner'
+import TopDestinationCard from './features/destinations/TopDestinationCard'
+import LoadingSpinner from './common/LoadingSpinner'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 function HorizontalScrollSection({ title, destinations, region, isLoading }) {
   const scrollContainerRef = useRef(null)
@@ -72,30 +73,18 @@ function HorizontalScrollSection({ title, destinations, region, isLoading }) {
   }
 
   return (
-    <section className="py-8">
+    <section className="py-8 md:py-12">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-6 text-gray-800">{title}</h2>
+        <h2 className="text-3xl md:text-4xl font-bold mb-8 text-gray-900">{title}</h2>
         <div className="relative">
           {/* Left Arrow */}
           {showLeftArrow && (
             <button
               onClick={() => scroll('left')}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-lg hover:bg-gray-100 transition-all duration-200 flex items-center justify-center"
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-lg hover:bg-gray-50 hover:shadow-xl transition-all duration-200 flex items-center justify-center border border-gray-100"
               aria-label="Scroll left"
             >
-              <svg
-                className="w-6 h-6 text-gray-700"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
+              <ChevronLeft className="w-5 h-5 text-gray-700" />
             </button>
           )}
 
@@ -116,22 +105,10 @@ function HorizontalScrollSection({ title, destinations, region, isLoading }) {
           {showRightArrow && (
             <button
               onClick={() => scroll('right')}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-lg hover:bg-gray-100 transition-all duration-200 flex items-center justify-center"
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-lg hover:bg-gray-50 hover:shadow-xl transition-all duration-200 flex items-center justify-center border border-gray-100"
               aria-label="Scroll right"
             >
-              <svg
-                className="w-6 h-6 text-gray-700"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
+              <ChevronRight className="w-5 h-5 text-gray-700" />
             </button>
           )}
         </div>

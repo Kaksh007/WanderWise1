@@ -1,4 +1,8 @@
 import { useState, useEffect } from 'react'
+import { Calendar } from 'lucide-react'
+import Card from './ui/Card'
+import Badge from './ui/Badge'
+import { cn } from '../utils/cn'
 
 const MONTHS = [
   { value: 'january', label: 'January' },
@@ -20,7 +24,6 @@ function MonthSelector({ selectedMonth, onMonthChange }) {
 
   useEffect(() => {
     if (!selectedMonth) {
-      // Get current month name
       const monthNames = [
         'january',
         'february',
@@ -54,28 +57,32 @@ function MonthSelector({ selectedMonth, onMonthChange }) {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 mb-8">
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-        <label className="text-lg font-semibold text-gray-700">
-          Select Month:
-        </label>
+    <Card className="mb-8" padding="md">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-2">
+          <Calendar className="h-5 w-5 text-primary-600" />
+          <label className="text-lg font-semibold text-gray-900">
+            Filter by Month:
+          </label>
+        </div>
         <div className="flex flex-wrap gap-2">
           {MONTHS.map((month) => (
             <button
               key={month.value}
               onClick={() => handleMonthChange(month.value)}
-              className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+              className={cn(
+                'px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm',
                 currentMonth === month.value
-                  ? 'bg-blue-500 text-white shadow-md scale-105'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
+                  ? 'bg-primary-600 text-white shadow-md scale-105'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105'
+              )}
             >
               {month.label}
             </button>
           ))}
         </div>
       </div>
-    </div>
+    </Card>
   )
 }
 

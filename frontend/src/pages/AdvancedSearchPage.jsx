@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import SearchForm from '../components/SearchForm'
+import SearchForm from '../components/features/search/SearchForm'
+import Container from '../components/layout/Container'
 
 function AdvancedSearchPage() {
   const navigate = useNavigate()
@@ -26,18 +27,20 @@ function AdvancedSearchPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 md:py-16">
+      <Container>
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold text-center mb-4 text-gray-800">
-            Advanced Search
-          </h1>
-          <p className="text-center text-gray-600 mb-8">
-            Get personalized travel recommendations based on your preferences
-          </p>
+          <div className="text-center mb-10">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+              Advanced Search
+            </h1>
+            <p className="text-lg text-gray-600">
+              Get personalized travel recommendations based on your preferences
+            </p>
+          </div>
           <SearchForm onSubmit={handleSearch} initialData={prefillData} />
         </div>
-      </div>
+      </Container>
     </div>
   )
 }
