@@ -48,7 +48,7 @@ function TopDestinationCard({ destination }) {
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
-            <span className="text-white text-4xl font-bold">
+            <span className="text-white text-4xl font-bold drop-shadow-lg">
               {destination.name.charAt(0)}
             </span>
           </div>

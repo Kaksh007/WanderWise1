@@ -7,6 +7,24 @@ const topPlaceSchema = new mongoose.Schema({
   xid: String, // Optional external ID (for future use)
 })
 
+const restaurantSchema = new mongoose.Schema({
+  name: String,
+  description: String,
+  location: String,
+  rating: Number,
+  priceRange: String, // 'low', 'medium', 'high'
+  cuisine: String,
+})
+
+const staySchema = new mongoose.Schema({
+  name: String,
+  description: String,
+  location: String,
+  rating: Number,
+  priceRange: String, // 'low', 'medium', 'high'
+  type: String, // 'hotel', 'resort', 'homestay', etc.
+})
+
 const coordsSchema = new mongoose.Schema(
   {
     lat: Number,
@@ -30,7 +48,10 @@ const destinationSchema = new mongoose.Schema(
       type: coordsSchema,
     },
     summary: String,
+    bestTimeToVisit: String,
     topPlaces: [topPlaceSchema],
+    restaurants: [restaurantSchema],
+    stays: [staySchema],
     cachedAt: {
       type: Date,
       default: Date.now,
