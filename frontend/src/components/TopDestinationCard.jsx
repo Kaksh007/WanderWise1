@@ -10,14 +10,6 @@ function TopDestinationCard({ destination }) {
     navigate(`/destination/${encodeURIComponent(destination.name)}`)
   }
 
-  const handleGetRecommendations = (e) => {
-    e.stopPropagation()
-    // Navigate to advanced search with destination pre-filled
-    navigate('/advanced-search', {
-      state: { prefillLocation: destination.name },
-    })
-  }
-
   const getBudgetColor = (budget) => {
     switch (budget?.toLowerCase()) {
       case 'low':
@@ -53,15 +45,6 @@ function TopDestinationCard({ destination }) {
             </span>
           </div>
         )}
-        {/* Overlay on hover */}
-        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 flex items-center justify-center">
-          <button
-            onClick={handleGetRecommendations}
-            className="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 px-6 py-3 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 shadow-lg"
-          >
-            Get Recommendations
-          </button>
-        </div>
       </div>
 
       {/* Content */}
