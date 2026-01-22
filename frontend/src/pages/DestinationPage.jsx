@@ -79,6 +79,19 @@ function DestinationPage() {
           </div>
         </div>
 
+        <div className="mb-6">
+          <button
+            onClick={() =>
+              navigate('/advanced-search', {
+                state: { prefillLocation: destination.name },
+              })
+            }
+            className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-semibold transition-colors duration-200"
+          >
+            Get Recommendations for this Destination
+          </button>
+        </div>
+
         <FeedbackButtons recommendationId={id} />
       </div>
     </div>

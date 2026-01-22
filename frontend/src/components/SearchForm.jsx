@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
-function SearchForm({ onSubmit }) {
+function SearchForm({ onSubmit, initialData }) {
   const [formData, setFormData] = useState({
     location: '',
     budgetRange: 'medium',
@@ -8,6 +8,12 @@ function SearchForm({ onSubmit }) {
     travelStyle: 'culture',
     interests: [],
   })
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData(initialData)
+    }
+  }, [initialData])
 
   const travelStyles = ['trekking', 'relaxation', 'culture', 'adventure', 'beach', 'city']
   const interestsOptions = ['nature', 'photography', 'history', 'food', 'nightlife', 'shopping', 'art', 'music']

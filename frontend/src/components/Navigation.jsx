@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../store/useAuthStore'
+import CompactSearchBar from './CompactSearchBar'
 
 function Navigation() {
   const navigate = useNavigate()
@@ -13,11 +14,23 @@ function Navigation() {
   return (
     <nav className="bg-white shadow-md">
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center py-4">
+        <div className="flex flex-col lg:flex-row justify-between items-center py-4 gap-4">
           <Link to="/" className="text-2xl font-bold text-blue-600">
             WanderWise
           </Link>
-          <div className="flex gap-4 items-center">
+          
+          {/* Compact Search Bar - Hidden on mobile, shown on larger screens */}
+          <div className="hidden md:block flex-1 max-w-md mx-4">
+            <CompactSearchBar />
+          </div>
+
+          <div className="flex gap-4 items-center flex-wrap justify-center">
+            <Link
+              to="/advanced-search"
+              className="text-gray-700 hover:text-blue-600 font-medium"
+            >
+              Advanced Search
+            </Link>
             {user ? (
               <>
                 <Link

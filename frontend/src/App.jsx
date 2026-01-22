@@ -13,6 +13,7 @@ const DestinationPage = lazy(() => import('./pages/DestinationPage'))
 const ProfilePage = lazy(() => import('./pages/ProfilePage'))
 const LoginPage = lazy(() => import('./pages/LoginPage'))
 const RegisterPage = lazy(() => import('./pages/RegisterPage'))
+const AdvancedSearchPage = lazy(() => import('./pages/AdvancedSearchPage'))
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
               <Route path="/" element={<LandingPage />} />
               <Route path="/results" element={<ResultsPage />} />
               <Route path="/destination/:id" element={<DestinationPage />} />
+              <Route path="/advanced-search" element={<AdvancedSearchPage />} />
               <Route
                 path="/profile"
                 element={
