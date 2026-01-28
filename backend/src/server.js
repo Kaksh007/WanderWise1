@@ -13,6 +13,9 @@ dotenv.config()
 const app = express()
 const PORT = process.env.PORT || 5000
 
+// Behind a proxy on platforms like Vercel/Render; trust X-Forwarded-* so rate limiting works
+app.set('trust proxy', 1)
+
 // Connect to MongoDB
 connectDB()
 

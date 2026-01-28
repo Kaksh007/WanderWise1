@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { MapPin, Mail, Github, Twitter } from 'lucide-react'
+import { MapPin, Mail, Github, Linkedin } from 'lucide-react'
 import Container from './Container'
 
 function Footer() {
@@ -20,21 +20,23 @@ function Footer() {
               </p>
               <div className="flex space-x-4">
                 <a
-                  href="#"
+                  href="https://www.linkedin.com/in/kaksh007/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-gray-400 hover:text-primary-400 transition-colors"
-                  aria-label="Twitter"
+                  aria-label="LinkedIn"
                 >
-                  <Twitter className="h-5 w-5" />
+                  <Linkedin className="h-5 w-5" />
                 </a>
                 <a
-                  href="#"
+                  href="https://github.com/Kaksh007"
                   className="text-gray-400 hover:text-primary-400 transition-colors"
                   aria-label="GitHub"
                 >
                   <Github className="h-5 w-5" />
                 </a>
                 <a
-                  href="#"
+                  href="mailto:kakshpatel2003@gmail.com"
                   className="text-gray-400 hover:text-primary-400 transition-colors"
                   aria-label="Email"
                 >
@@ -145,8 +147,21 @@ function Footer() {
             </div>
           </div>
 
-          <div className="mt-8 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; {new Date().getFullYear()} WanderWise. All rights reserved.</p>
+          <div className="mt-8 pt-8 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+            <p className="text-center md:text-left">
+              &copy; {new Date().getFullYear()} WanderWise. Built by{' '}
+              <span className="font-semibold text-white">Kaksh</span>.
+            </p>
+            <a
+              href="https://github.com/Kaksh007"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-gray-400 hover:text-primary-400 transition-colors"
+              aria-label="View on GitHub"
+            >
+              <Github className="h-5 w-5" />
+              <span className="hidden sm:inline">GitHub</span>
+            </a>
           </div>
         </div>
       </Container>

@@ -1,0 +1,1 @@
+import{a}from"./api-DKuqC_Wc.js";const r={async register(t){return await a.post("/auth/register",t)},async login(t){return await a.post("/auth/login",t)},async loginWithGoogle(t){return await a.post("/auth/google",t)}};export{r as a};
