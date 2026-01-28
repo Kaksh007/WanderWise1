@@ -1,0 +1,1 @@
+import{a as o}from"./api-D9SQTOcm.js";const t={async getBookmarks(){return await o.get("/bookmarks")},async addBookmark(a,r="",k=""){return await o.post("/bookmarks",{destinationId:a,destinationName:r,note:k})},async removeBookmark(a){return await o.delete(`/bookmarks/${a}`)}};export{t as b};

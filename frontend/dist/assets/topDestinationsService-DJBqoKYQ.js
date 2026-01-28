@@ -1,1 +1,0 @@
-import{a}from"./api-DKuqC_Wc.js";const i={async getTopDestinations(s,t=null){const n=new URLSearchParams({region:s});return t&&n.append("month",t),(await a.get(`/destination/top?${n.toString()}`)).destinations||[]}};export{i as t};
