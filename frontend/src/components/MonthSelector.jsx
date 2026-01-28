@@ -65,7 +65,7 @@ function MonthSelector({ selectedMonth, onMonthChange }) {
             Filter by Month:
           </label>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex gap-2 overflow-x-auto scrollbar-hide whitespace-nowrap">
           {MONTHS.map((month) => (
             <button
               key={month.value}

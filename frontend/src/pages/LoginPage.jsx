@@ -19,6 +19,24 @@ function LoginPage() {
   })
   const [loading, setLoading] = useState(false)
 
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
+  const googleRedirectUri =
+    import.meta.env.VITE_GOOGLE_REDIRECT_URI || 'http://localhost:5173/auth/google/callback'
+
+  const buildGoogleAuthUrl = () => {
+    if (!googleClientId) return '#'
+
+    const params = new URLSearchParams()
+    params.set('client_id', googleClientId)
+    params.set('redirect_uri', googleRedirectUri)
+    params.set('response_type', 'code')
+    params.set('scope', 'openid email profile')
+    params.set('access_type', 'offline')
+    params.set('include_granted_scopes', 'true')
+
+    return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`
+  }
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -92,6 +110,32 @@ function LoginPage() {
                 {loading ? 'Logging in...' : 'Sign In'}
               </Button>
             </form>
+
+            {googleClientId && (
+              <div className="mt-6">
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-gray-200" />
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <a
+                    href={buildGoogleAuthUrl()}
+                    className="w-full inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    <img
+                      src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                      alt="Google"
+                      className="h-5 w-5 mr-2"
+                    />
+                    Sign in with Google
+                  </a>
+                </div>
+              </div>
+            )}
 
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">

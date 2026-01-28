@@ -136,7 +136,7 @@ function DestinationPage() {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <BookmarkButton destinationId={id} />
+                  <BookmarkButton destinationId={id} destinationName={destination.name} />
                   <Button
                     variant="ghost"
                     size="sm"
@@ -184,7 +184,7 @@ function DestinationPage() {
                       <span>{destination.country}</span>
                     </div>
                   </div>
-                  <BookmarkButton destinationId={id} />
+                  <BookmarkButton destinationId={id} destinationName={destination.name} />
                 </div>
               )}
               

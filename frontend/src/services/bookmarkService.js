@@ -5,8 +5,8 @@ export const bookmarkService = {
     return await api.get('/bookmarks')
   },
 
-  async addBookmark(destinationId, note = '') {
-    return await api.post('/bookmarks', { destinationId, note })
+  async addBookmark(destinationId, destinationName = '', note = '') {
+    return await api.post('/bookmarks', { destinationId, destinationName, note })
   },
 
   async removeBookmark(destinationId) {

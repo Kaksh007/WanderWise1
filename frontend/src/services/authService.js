@@ -8,5 +8,9 @@ export const authService = {
   async login(credentials) {
     return await api.post('/auth/login', credentials)
   },
+
+  async loginWithGoogle(payload) {
+    return await api.post('/auth/google', payload)
+  },
 }
 

@@ -15,6 +15,7 @@ const ProfilePage = lazy(() => import('./pages/ProfilePage'))
 const LoginPage = lazy(() => import('./pages/LoginPage'))
 const RegisterPage = lazy(() => import('./pages/RegisterPage'))
 const AdvancedSearchPage = lazy(() => import('./pages/AdvancedSearchPage'))
+const GoogleCallbackPage = lazy(() => import('./pages/GoogleCallbackPage'))
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
               />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
+              <Route path="/auth/google/callback" element={<GoogleCallbackPage />} />
             </Routes>
           </Suspense>
           <Footer />
