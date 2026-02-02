@@ -40,6 +40,8 @@ GEONAMES_USERNAME=your-geonames-username
 NODE_ENV=development
 ```
 
+> `GROQ_API_KEY` powers the recommendation engine through `backend/src/ai/adapters/groqAdapter.js`; treat it like any other secret and verify it with `backend/scripts/deploy-check.js` if you're moving to staging or production.
+
 **Frontend (.env file in `frontend/` folder):**
 
 Create `frontend/.env`:
@@ -134,4 +136,5 @@ npm run dev
 - Read the full [README.md](README.md) for project overview
 - Check [DEPLOYMENT.md](DEPLOYMENT.md) for production deployment
 - Review [PROJECT_GUIDE.md](PROJECT_GUIDE.md) for complete architecture details, development phases, and codebase navigation
+- Run `cd backend && npm run deploy-check` once your env vars are set to confirm Groq and other keys are present
 

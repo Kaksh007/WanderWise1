@@ -10,6 +10,13 @@ WanderWise recommends travel destinations and top places to visit based on a use
 - **AI/LLM:** Groq chat completions (llama-3.1-8b-instant by default) with rule-based fallback
 - **POI Data:** OpenTripMap API, GeoNames API
 
+## AI Module
+
+- Recommendations are generated through `backend/src/ai/adapters/groqAdapter.js`, which uses `groq-sdk` chat completions and sensible retry/backoff handling.
+- `backend/src/ai/llmService.js` orchestrates prompt construction, parsing, and validation before delegating to Groq or the fallback service.
+- Fallback logic in `backend/src/ai/fallbackService.js` keeps recommendations flowing when Groq is unavailable.
+- Set `GROQ_API_KEY` in the backend environment (e.g., `.env`) so `scripts/deploy-check.js` can validate access before production deploys.
+
 ## Project Structure
 
 ```

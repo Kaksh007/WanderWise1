@@ -53,6 +53,7 @@
 ## Post-Deployment Checklist
 
 - [ ] Test health endpoint: `GET /api/health`
+- [ ] Test AI health endpoint: `GET /api/ai/health` (ensures Groq adapter is reachable)
 - [ ] Test authentication endpoints
 - [ ] Test recommendation endpoint
 - [ ] Verify CORS is working
@@ -66,6 +67,8 @@
 1. Visit https://groq.com/console (or the Groq Console API Keys page)
 2. Sign up / log in and create a new API key for chat completions
 3. Copy the key into `GROQ_API_KEY` in your backend environment variables
+
+> Use `backend/scripts/deploy-check.js` (run with `npm run deploy-check`) to ensure the `GROQ_API_KEY` and other secrets are configured before production deploys. This script will warn if the key is missing or looks like a placeholder.
 
 ### OpenTripMap
 1. Go to https://opentripmap.io/docs

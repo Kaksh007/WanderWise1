@@ -1043,6 +1043,8 @@ GEONAMES_USERNAME=your-geonames-username
 NODE_ENV=development
 ```
 
+> `GROQ_API_KEY` is required for the Groq chat-completion adapter. Run `backend/scripts/deploy-check.js` (via `npm run deploy-check`) to verify the key and other env vars before deploying.
+
 ### Frontend (`.env`)
 
 ```env

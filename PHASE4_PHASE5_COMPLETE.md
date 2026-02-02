@@ -1,5 +1,12 @@
 # Phase 4 & 5 Implementation Complete
 
+## Phase 3: AI Recommendation Engine (Groq) ✅
+
+- `backend/src/ai/adapters/groqAdapter.js` uses `groq-sdk` chat completions (default `llama-3.1-8b-instant`) with retries and exponential backoff.
+- `backend/src/ai/llmService.js` builds rich prompts, parses Groq responses, validates the structure, and falls back to `backend/src/ai/fallbackService.js` when needed.
+- Cached POI data (Destination) and recommendations (Recommendation) keep Groq calls efficient while ensuring 24-hour reuse.
+- `GROQ_API_KEY` is required for production; `backend/scripts/deploy-check.js` validates it before deployment, and the `/api/ai/health` endpoint exposes provider availability.
+
 ## Phase 4: Frontend Development ✅
 
 ### Completed Features
