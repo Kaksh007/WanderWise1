@@ -12,7 +12,7 @@ const checks = {
   envVars: [
     'MONGO_URI',
     'JWT_SECRET',
-    'HF_API_KEY',
+    'GROQ_API_KEY',
     'OPENTRIPMAP_API_KEY',
     'GEONAMES_USERNAME',
     'GOOGLE_CLIENT_ID',

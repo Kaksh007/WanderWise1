@@ -24,7 +24,7 @@ This document provides a comprehensive overview of the WanderWise project struct
 **WanderWise** is an AI-powered travel recommendation system that suggests destinations based on user preferences (budget, location, travel style, interests). It uses:
 
 - **MERN Stack**: MongoDB, Express, React, Node.js
-- **AI/LLM**: Hugging Face Inference API for generating recommendations
+- **AI/LLM**: Groq chat completions (default model `llama-3.1-8b-instant`)
 - **POI Data**: OpenTripMap and GeoNames for real places of interest
 - **Fallback System**: Rule-based recommendations when AI fails
 
@@ -55,7 +55,7 @@ This project was developed following a structured 5-phase plan over 8-10 weeks. 
 - **Frontend:** React 18 + JavaScript, Vite, Tailwind CSS, React Router v6, Zustand (lightweight state)
 - **Backend:** Node.js + Express, JWT (jsonwebtoken), bcrypt
 - **Database:** MongoDB Atlas (Mongoose ODM)
-- **AI/LLM:** Hugging Face Inference API (primary), fallback to rule-based
+- **AI/LLM:** Groq chat completions (primary), fallback to rule-based
 - **POI Data:** OpenTripMap API, GeoNames API
 - **Deployment:** Vercel (frontend), Render/Railway (backend), MongoDB Atlas
 
@@ -157,23 +157,23 @@ This folder contains all AI/LLM-related logic, keeping it separate from other se
 - `llmService.js` - Main LLM service orchestrator (handles provider selection, retries, error handling)
 - `promptBuilder.js` - Prompt template builder and construction logic
 - `fallbackService.js` - Rule-based fallback recommender (when LLM fails)
-- `adapters/huggingFaceAdapter.js` - Hugging Face Inference API adapter (provider-specific implementation)
+- `adapters/groqAdapter.js` - Groq chat completions adapter (provider-specific implementation)
 
 **Utility Files:**
 - `backend/src/utils/jsonParser.js` - Parse and validate LLM JSON responses (shared utility)
 
 **LLM Service Architecture:**
 - `llmService.js` acts as the main orchestrator:
-  - Provider selection (currently Hugging Face, extensible for OpenAI later)
+  - Provider selection (currently Groq, extensible for other providers)
   - Retry logic and error handling
   - Response validation
   - Fallback to rule-based service on failure
 
-- `adapters/huggingFaceAdapter.js`:
-  - Direct Hugging Face Inference API integration
-  - Model selection: `google/flan-t5-base` or `mistralai/Mistral-7B-Instruct-v0.2` (check free tier)
-  - Token limit: 500 tokens max per request
-  - Rate limit handling
+- `adapters/groqAdapter.js`:
+  - Integrates with Groq chat completions using `groq-sdk`
+  - Default model: `llama-3.1-8b-instant` (easily switchable to other Groq models)
+  - `llmService` requests up to 2000 tokens at temperature 0.7; both values can be adjusted
+  - Retries with exponential backoff for 429/403 errors and logs provider responses
 
 - `promptBuilder.js`:
   - Constructs prompts with user preferences
@@ -216,7 +216,7 @@ Output format: {candidates: [{name, score, reason, topPlaces: [{name, descriptio
    - Fetch POI data for location (or "anywhere" → use popular destinations) via POI service
    - Call `llmService.generateRecommendations(userInput, poiData)`
      - Internally uses `promptBuilder` to construct prompt
-     - Calls Hugging Face adapter via `adapters/huggingFaceAdapter.js`
+    - Calls Groq adapter via `adapters/groqAdapter.js`
      - If LLM fails → automatically falls back to `fallbackService`
      - Returns structured recommendations
    - Cache result in MongoDB
@@ -306,7 +306,7 @@ Output format: {candidates: [{name, score, reason, topPlaces: [{name, descriptio
     - `fallbackService.test.js` - Test fallback logic
   - `tests/utils/` - Utility tests
     - `jsonParser.test.js` - Test JSON parsing
-  - Mock external APIs (OpenTripMap, Hugging Face)
+  - Mock external APIs (OpenTripMap, Groq)
 
 **Frontend Tests:**
 - React Testing Library for component tests (structure ready)
@@ -397,7 +397,7 @@ Output format: {candidates: [{name, score, reason, topPlaces: [{name, descriptio
                     ┌─────────────────────┐
                     │  External Services  │
                     ├─────────────────────┤
-                    │ • Hugging Face API  │
+                    │ • Groq API          │
                     │ • OpenTripMap API   │
                     │ • GeoNames API      │
                     └─────────────────────┘
@@ -420,8 +420,8 @@ Output format: {candidates: [{name, score, reason, topPlaces: [{name, descriptio
 - bcrypt (password hashing)
 - Axios (external API calls)
 
-**External Services:**
-- Hugging Face Inference API (LLM)
+-**External Services:**
+- Groq chat completions API (LLM)
 - OpenTripMap API (POI data)
 - GeoNames API (place validation)
 
@@ -475,7 +475,7 @@ WanderWise1/
 │   ├── src/
 │   │   ├── ai/                # AI MODULE (separate folder!)
 │   │   │   ├── adapters/
-│   │   │   │   └── huggingFaceAdapter.js  # Hugging Face API client
+│   │   │   │   └── groqAdapter.js  # Groq chat completions client
 │   │   │   ├── llmService.js             # Main LLM orchestrator
 │   │   │   ├── promptBuilder.js          # Prompt construction
 │   │   │   └── fallbackService.js         # Rule-based fallback
@@ -689,7 +689,7 @@ All API calls go through service files in `frontend/src/services/`:
        │
        ├─▶ llmService.generateRecommendations(userInput, poiData)
        │   ├─▶ promptBuilder.buildRecommendationPrompt()
-       │   ├─▶ huggingFaceAdapter.generate()
+       │   ├─▶ groqAdapter.generate()
        │   ├─▶ jsonParser.parseLLMResponse()
        │   └─▶ If fails → fallbackService.generateRecommendations()
        │
@@ -750,10 +750,10 @@ All API calls go through service files in `frontend/src/services/`:
    - Formats POI context
    - Ensures consistent prompt structure
 
-3. **`adapters/huggingFaceAdapter.js`** - Provider-specific
-   - Direct Hugging Face API calls
-   - Handles rate limits
-   - Retries on failures
+3. **`adapters/groqAdapter.js`** - Provider-specific
+   - Integrates with Groq chat completions using `groq-sdk`
+   - Default model `llama-3.1-8b-instant`; options allow swapping to other Groq models
+   - Retries with exponential backoff for 429/403 errors and logs provider responses
 
 4. **`fallbackService.js`** - Rule-based backup
    - Budget → destination mapping
@@ -953,11 +953,11 @@ Response: { message, feedback }
    Output format: {candidates: [{name, score, reason, topPlaces, sampleItineraryText}]}
    ```
 
-2. **LLM Call** (`huggingFaceAdapter.js`)
-   - Sends prompt to Hugging Face Inference API
-   - Model: `google/flan-t5-base` (configurable)
-   - Max tokens: 500
-   - Temperature: 0.7
+2. **LLM Call** (`groqAdapter.js`)
+   - Sends prompt to Groq chat completions API via `groq-sdk`
+   - Default model: `llama-3.1-8b-instant` (swap to other Groq models if needed)
+   - Tokens: `llmService` requests up to 2000 tokens at 0.7 temperature; adapter defaults to 500 and exposes overrides
+   - Handles retries with exponential backoff for 429/403 responses
 
 3. **Response Parsing** (`jsonParser.js`)
    - Extracts JSON from response (handles extra text)
@@ -993,7 +993,7 @@ Response: { message, feedback }
 3. Backend: `backend/src/routes/recommend.js`
 4. Controller: `backend/src/controllers/recommendController.js`
 5. AI: `backend/src/ai/llmService.js`
-6. Adapter: `backend/src/ai/adapters/huggingFaceAdapter.js`
+6. Adapter: `backend/src/ai/adapters/groqAdapter.js`
 
 #### **Modify the AI prompt:**
 - File: `backend/src/ai/promptBuilder.js`
@@ -1037,7 +1037,7 @@ Response: { message, feedback }
 PORT=5000
 MONGO_URI=mongodb+srv://...
 JWT_SECRET=your-secret-key
-HF_API_KEY=your-huggingface-key
+GROQ_API_KEY=your-groq-key
 OPENTRIPMAP_API_KEY=your-opentripmap-key
 GEONAMES_USERNAME=your-geonames-username
 NODE_ENV=development
@@ -1111,7 +1111,7 @@ npm test
 - Verify database user credentials
 
 ### "No recommendations returned"
-- Check Hugging Face API key
+- Check Groq API key
 - Check OpenTripMap API key
 - System should fallback to rule-based recommendations
 - Check backend console logs

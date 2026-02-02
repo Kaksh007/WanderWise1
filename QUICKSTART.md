@@ -6,7 +6,7 @@
 - npm or yarn
 - MongoDB Atlas account (free tier)
 - API keys for:
-  - Hugging Face (free tier)
+  - Groq (free tier chat completions)
   - OpenTripMap (free tier)
   - GeoNames (free, just username)
 
@@ -34,7 +34,7 @@ Create `backend/.env` from `backend/.env.example`:
 PORT=5000
 MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/wanderwise?retryWrites=true&w=majority
 JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
-HF_API_KEY=your-huggingface-api-key
+GROQ_API_KEY=your-groq-api-key
 OPENTRIPMAP_API_KEY=your-opentripmap-api-key
 GEONAMES_USERNAME=your-geonames-username
 NODE_ENV=development
@@ -50,10 +50,10 @@ VITE_API_BASE_URL=http://localhost:5000/api
 
 ### 3. Get API Keys
 
-#### Hugging Face
-1. Go to https://huggingface.co/settings/tokens
-2. Create a new token (read access is enough) (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)and (Wanderwise)
-3. Copy the token to `HF_API_KEY`
+#### Groq
+1. Visit https://groq.com/console and access the API keys section
+2. Create a new chat completions key (read-only rights are sufficient)
+3. Store the value in `GROQ_API_KEY`
 
 #### OpenTripMap
 1. Go to https://opentripmap.io/docs
@@ -119,7 +119,7 @@ npm run dev
 - Check CORS settings in backend
 
 ### No recommendations returned
-- Check Hugging Face API key
+- Check Groq API key
 - Check OpenTripMap API key
 - Check browser console and backend logs
 - System will fallback to rule-based recommendations if LLM fails

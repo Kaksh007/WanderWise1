@@ -7,7 +7,7 @@ WanderWise recommends travel destinations and top places to visit based on a use
 - **Frontend:** React 18 + JavaScript, Vite, Tailwind CSS, React Router v6, Zustand
 - **Backend:** Node.js + Express, JWT, bcrypt
 - **Database:** MongoDB Atlas (Mongoose)
-- **AI/LLM:** Hugging Face Inference API (primary), rule-based fallback
+- **AI/LLM:** Groq chat completions (llama-3.1-8b-instant by default) with rule-based fallback
 - **POI Data:** OpenTripMap API, GeoNames API
 
 ## Project Structure
@@ -44,7 +44,7 @@ See [QUICKSTART.md](QUICKSTART.md) for detailed setup instructions.
 
 ## Features
 
-- **AI-Powered Recommendations:** Get personalized travel suggestions using Hugging Face LLM
+- **AI-Powered Recommendations:** Get personalized travel suggestions using Groq LLM completions
 - **POI Integration:** Real places of interest from OpenTripMap and GeoNames
 - **User Authentication:** Secure JWT-based auth system
 - **Bookmarks:** Save your favorite destinations

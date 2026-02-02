@@ -3,7 +3,7 @@
 ## Prerequisites
 
 - MongoDB Atlas account (free tier)
-- Hugging Face API key
+- Groq API key (`GROQ_API_KEY`)
 - OpenTripMap API key
 - GeoNames username (free, no key needed)
 - Vercel account (for frontend)
@@ -16,7 +16,7 @@
    PORT=5000
    MONGO_URI=your-mongodb-atlas-connection-string
    JWT_SECRET=your-secret-key
-   HF_API_KEY=your-huggingface-key
+   GROQ_API_KEY=your-groq-api-key
    OPENTRIPMAP_API_KEY=your-opentripmap-key
    GEONAMES_USERNAME=your-geonames-username
    NODE_ENV=production
@@ -62,10 +62,10 @@
 
 ## API Keys Setup
 
-### Hugging Face
-1. Go to https://huggingface.co/settings/tokens
-2. Create a new token
-3. Add to backend environment variables
+### Groq
+1. Visit https://groq.com/console (or the Groq Console API Keys page)
+2. Sign up / log in and create a new API key for chat completions
+3. Copy the key into `GROQ_API_KEY` in your backend environment variables
 
 ### OpenTripMap
 1. Go to https://opentripmap.io/docs
