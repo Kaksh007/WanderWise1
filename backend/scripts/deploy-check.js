@@ -17,7 +17,7 @@ const checks = {
     'GEONAMES_USERNAME',
     'GOOGLE_CLIENT_ID',
     'GOOGLE_CLIENT_SECRET',
-    'GOOGLE_REDIRECT_URI',
+    // GOOGLE_REDIRECT_URI optional if frontend sends redirect_uri
   ],
 }
 

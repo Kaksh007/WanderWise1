@@ -1,14 +1,14 @@
+// Load env first so GROQ_API_KEY etc. are available when routes/services load
+import 'dotenv/config'
+
 import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
-import dotenv from 'dotenv'
 import connectDB from './config/database.js'
 import errorHandler from './middleware/errorHandler.js'
 import rateLimiter from './middleware/rateLimiter.js'
 import routes from './routes/index.js'
 import { logger } from './utils/logger.js'
-
-dotenv.config()
 
 const app = express()
 const PORT = process.env.PORT || 5000

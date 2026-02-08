@@ -1,0 +1,43 @@
+/* Force footer to a single solid background — no patterns, no dotted lines */
+.site-footer {
+  background-color: #0f172a !important;
+  background-image: none !important;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* Solid overlay on larger screens to cover any pattern bleeding from parent/body */
+@media (min-width: 768px) {
+  .site-footer::before {
+    content: '' !important;
+    display: block !important;
+    position: absolute;
+    inset: 0;
+    background-color: #0f172a !important;
+    background-image: none !important;
+    z-index: 0;
+    pointer-events: none;
+  }
+}
+
+.site-footer::after {
+  display: none !important;
+  content: none !important;
+}
+
+.site-footer *,
+.site-footer *::before,
+.site-footer *::after {
+  background-image: none !important;
+}
+
+.site-footer .footer-content-wrap {
+  position: relative;
+  z-index: 1;
+}
+
+.site-footer .footer-inner {
+  background-color: transparent;
+  background-image: none !important;
+}

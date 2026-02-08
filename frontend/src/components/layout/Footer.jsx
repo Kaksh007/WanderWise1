@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom'
 import { MapPin, Mail, Github, Linkedin } from 'lucide-react'
 import Container from './Container'
+import './Footer.css'
 
 function Footer() {
   return (
-    <footer className="bg-gray-900 text-gray-300">
-      <Container>
-        <div className="py-12 md:py-16">
+    <footer className="site-footer text-gray-300">
+      <Container className="footer-content-wrap">
+        <div className="footer-inner py-12 md:py-16">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {/* Brand */}
             <div className="space-y-4">

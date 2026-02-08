@@ -88,7 +88,6 @@ function LandingPage() {
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-primary-600 via-primary-700 to-purple-600 text-white">
-        <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
         <Container>
           <div className="relative py-20 md:py-28 text-center">
