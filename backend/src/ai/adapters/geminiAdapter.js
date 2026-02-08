@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || 'AIzaSyCCzMoK_iwK0WUlVupooFjR_9vWlBVnxeI'
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta'
 
 // Using Gemini 1.5 Flash as default (fast and efficient)

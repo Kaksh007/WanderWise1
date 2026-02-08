@@ -1,6 +1,6 @@
 import Groq from 'groq-sdk'
 
-const GROQ_API_KEY = process.env.GROQ_API_KEY || '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'
+const GROQ_API_KEY = process.env.GROQ_API_KEY
 
 // Using a fast model from Groq
 // You can change this to other models like 'llama3-70b-8192', 'mixtral-8x7b-32768', etc.
