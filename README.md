@@ -1,68 +1,75 @@
-# WanderWise - AI-Powered Travel Recommender
+# WanderWise — AI‑Powered Travel Recommender
 
-WanderWise recommends travel destinations and top places to visit based on a user's budget, preferred location, travel style and interests. Built with MERN stack (MongoDB, Express, Node.js, React) and lightweight AI text generation using free/freemium inference APIs.
+WanderWise recommends travel destinations and builds an itinerary-style response based on a user's budget, preferred location, travel style, and interests. It’s a MERN app (MongoDB, Express, React, Node) with AI-powered generation and a rule-based fallback when the LLM is unavailable.
 
-## Tech Stack
+## Tech stack (actual repo)
 
-- **Frontend:** React 18 + JavaScript, Vite, Tailwind CSS, React Router v6, Zustand
-- **Backend:** Node.js + Express, JWT, bcrypt
-- **Database:** MongoDB Atlas (Mongoose)
-- **AI/LLM:** Groq chat completions (llama-3.1-8b-instant by default) with rule-based fallback
-- **POI Data:** OpenTripMap API, GeoNames API
+- **Frontend**: React 18 (Vite), Tailwind CSS, React Router v6, Zustand, Axios
+- **Backend**: Node.js (Express), JWT auth, bcrypt, rate limiting, Helmet
+- **Database**: MongoDB (Mongoose)
+- **AI/LLM**: Groq chat completions via `groq-sdk` + deterministic fallback
 
-## AI Module
+## AI module (how it works)
 
-- Recommendations are generated through `backend/src/ai/adapters/groqAdapter.js`, which uses `groq-sdk` chat completions and sensible retry/backoff handling.
-- `backend/src/ai/llmService.js` orchestrates prompt construction, parsing, and validation before delegating to Groq or the fallback service.
-- Fallback logic in `backend/src/ai/fallbackService.js` keeps recommendations flowing when Groq is unavailable.
-- Set `GROQ_API_KEY` in the backend environment (e.g., `.env`) so `scripts/deploy-check.js` can validate access before production deploys.
+- **Entry point**: `backend/src/ai/llmService.js` (`generateRecommendations`)
+- **Prompt building**: `backend/src/ai/promptBuilder.js`
+- **LLM provider (Groq)**: `backend/src/ai/adapters/groqAdapter.js` (uses `groq-sdk`)
+- **Parsing + validation**: `backend/src/utils/jsonParser.js` (parses the raw model output + validates schema)
+- **Fallback**: `backend/src/ai/fallbackService.js` (used when `GROQ_API_KEY` is missing or the response is invalid / the call fails)
+- **Health check**: `GET /api/ai/health` (reports whether Groq is configured and reachable)
 
-## Project Structure
+## Project structure
 
 ```
-wanderwise/
-├── frontend/          # React frontend application
-├── backend/           # Express backend API
+WanderWise1/
+├── frontend/          # React frontend app (Vite)
+├── backend/           # Express API + MongoDB + AI services
 └── README.md
 ```
 
-## Getting Started
+## Getting started
 
-See [QUICKSTART.md](QUICKSTART.md) for detailed setup instructions.
+### Install
 
-### Quick Setup
+```bash
+cd backend && npm install
+cd ../frontend && npm install
+```
 
-1. Install dependencies:
-   ```bash
-   cd backend && npm install
-   cd ../frontend && npm install
-   ```
+### Backend environment variables
 
-2. Configure environment variables (see `QUICKSTART.md`)
+Create `backend/.env`:
 
-3. Start servers:
-   ```bash
-   # Terminal 1 - Backend
-   cd backend && npm run dev
+- **Required**
+  - `MONGO_URI`
+  - `JWT_SECRET`
+  - `GROQ_API_KEY` (if missing, the backend automatically falls back to the rule-based generator)
+- **Optional**
+  - `PORT` (defaults to `5000`)
+  - `NODE_ENV`
+  - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REDIRECT_URI` (only if you’re using the Google login endpoint)
 
-   # Terminal 2 - Frontend
-   cd frontend && npm run dev
-   ```
+### Run (dev)
 
-## Features
+```bash
+# Terminal 1 - Backend
+cd backend && npm run dev
 
-- **AI-Powered Recommendations:** Get personalized travel suggestions using Groq LLM completions
-- **POI Integration:** Real places of interest from OpenTripMap and GeoNames
-- **User Authentication:** Secure JWT-based auth system
-- **Bookmarks:** Save your favorite destinations
-- **Feedback System:** Rate recommendations to improve results
-- **Smart Caching:** Reduces API calls and improves response times
-- **Fallback System:** Always returns recommendations even if LLM fails
+# Terminal 2 - Frontend
+cd frontend && npm run dev
+```
 
-## Documentation
+## Key features (implemented)
 
-- [QUICKSTART.md](QUICKSTART.md) - Detailed setup and configuration guide
-- [DEPLOYMENT.md](DEPLOYMENT.md) - Production deployment instructions
+- **AI-powered recommendations** with schema validation + **fallback** when the LLM fails
+- **Destination details + caching** (MongoDB cache with a 7-day TTL in `backend/src/services/poiService.js`)
+- **Authentication**: email/password JWT auth + Google OAuth exchange endpoint
+- **Bookmarks + feedback** models and routes
+
+## Useful endpoints
+
+- **API health**: `GET /api/health`
+- **AI health**: `GET /api/ai/health`
 
 ## License
 

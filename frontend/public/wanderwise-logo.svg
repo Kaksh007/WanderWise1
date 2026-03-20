@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="WanderWise pin icon">
+  <rect width="64" height="64" rx="14" fill="#ffffff" />
+  <path
+    d="M32 10c-9.39 0-17 7.61-17 17 0 12.36 17 30.5 17 30.5S49 39.36 49 27c0-9.39-7.61-17-17-17z"
+    fill="none"
+    stroke="#2D5BDE"
+    stroke-width="4.2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <circle cx="32" cy="27" r="6" fill="none" stroke="#2D5BDE" stroke-width="4.2" />
+</svg>
